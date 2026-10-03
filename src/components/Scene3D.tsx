@@ -13,17 +13,18 @@ function Core() {
   const mesh = useRef<THREE.Mesh>(null);
   const geometry = useMemo(() => new THREE.IcosahedronGeometry(1.6, 24), []);
   const basePositions = useMemo(
-    () => (geometry.attributes.position.array as Float32Array).slice(),
+    () =>
+      ((geometry.attributes["position"] as THREE.BufferAttribute).array as Float32Array).slice(),
     [geometry],
   );
 
   useFrame(({ clock }) => {
     const t = clock.getElapsedTime();
-    const pos = geometry.attributes.position as THREE.BufferAttribute;
+    const pos = geometry.attributes["position"] as THREE.BufferAttribute;
     const arr = pos.array as Float32Array;
     const v = new THREE.Vector3();
     for (let i = 0; i < arr.length; i += 3) {
-      v.set(basePositions[i], basePositions[i + 1], basePositions[i + 2]);
+      v.set(basePositions[i]!, basePositions[i + 1]!, basePositions[i + 2]!);
       const n =
         0.22 *
         Math.sin(v.x * 2.1 + t * 1.4) *
