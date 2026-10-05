@@ -4,7 +4,7 @@ import { INGREDIENTS, layerStart, type BurgerState } from "@/lib/burger-data";
 
 // A cena 3D usa WebGL, então é carregada sob demanda e só no navegador.
 // Se o carregamento falhar, a página continua visível (sem a cena) em vez de ficar em branco.
-const NoScene = (_: { state: unknown }) => null;
+const NoScene = (_: { state: unknown }) => <></>;
 const BurgerScene = lazy(() =>
   import("@/components/BurgerScene")
     .then((m) => ({ default: m.default ?? NoScene }))
