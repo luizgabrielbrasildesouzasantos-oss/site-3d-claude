@@ -3,7 +3,16 @@ import { lazy, Suspense, useEffect, useRef, useState } from "react";
 import { INGREDIENTS, layerStart, type BurgerState } from "@/lib/burger-data";
 
 // A cena 3D usa WebGL, então é carregada sob demanda e só no navegador.
-const BurgerScene = lazy(() => import("@/components/BurgerScene"));
+// Se o carregamento falhar, a página continua visível (sem a cena) em vez de ficar em branco.
+const NoScene = (_: { state: unknown }) => <></>;
+const BurgerScene = lazy(() =>
+  import("@/components/BurgerScene")
+    .then((m) => ({ default: m.default ?? NoScene }))
+    .catch((err) => {
+      console.warn("Falha ao carregar a cena 3D:", err instanceof Error ? err.message : err);
+      return { default: NoScene };
+    }),
+);
 
 const DESCRIPTION =
   "Hamburgueria artesanal grelhada na brasa. Role a página e veja o burger ser montado camada por camada.";
